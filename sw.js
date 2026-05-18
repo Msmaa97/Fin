@@ -1,5 +1,6 @@
-const CACHE = 'mali-dashboard-v1';
-const FILES = ['./index.html', './manifest.json'];
+// Network first — always fetch fresh, fallback to cache if offline
+const CACHE = 'mali-dashboard-v2';
+const FILES = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -18,7 +19,15 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  // Network first: try to get fresh copy, fall back to cache if offline
   e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request))
+    fetch(e.request)
+      .then(response => {
+        // Update cache with fresh version
+        const clone = response.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return response;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
