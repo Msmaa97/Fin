@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>داش بورد مالي</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3d8ef0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="مالي">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0f14;--s:#151820;--s2:#1c2030;--bd:#252a3a;--ac:#3d8ef0;--ac2:#00d4aa;--tx:#e8eaf0;--tx2:#8892a4;--gr:#00d4aa;--rd:#ff4d6d;--wn:#ffb830;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);padding:12px;font-size:13px;}
+input,select,button,textarea{font-family:'Tajawal',sans-serif;}
+
+/* NAV */
+.nav{display:flex;gap:5px;margin-bottom:16px;border-bottom:1px solid var(--bd);padding-bottom:11px;flex-wrap:wrap;align-items:center;}
+.ntitle{font-size:16px;font-weight:900;margin-left:auto;}
+.nb{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--tx2);transition:all .2s;white-space:nowrap;}
+.nb:hover{border-color:var(--ac);color:var(--tx);}
+.nb.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700;}
+
+/* PAGE */
+.pg{display:none;}.pg.on{display:block;}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px;}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:10px;padding:12px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;right:0;width:3px;height:100%;}
+.cb::before{background:var(--ac)}.cw::before{background:var(--wn)}.cg::before{background:var(--gr)}.cr::before{background:var(--rd)}
+.clbl{font-size:10px;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
+.cval{font-size:18px;font-weight:900;letter-spacing:-1px;}
+.csub{font-size:10px;color:var(--tx2);margin-top:2px;}
+
+/* BOX */
+.box{background:var(--s);border:1px solid var(--bd);border-radius:10px;margin-bottom:11px;overflow:hidden;}
+.bh{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--s2);border-bottom:1px solid var(--bd);}
+.bht{font-size:13px;font-weight:700;}
+.bhv{font-size:13px;font-weight:700;color:var(--ac2);}
+
+/* ROWS */
+.er{display:flex;align-items:center;gap:5px;padding:7px 14px;border-bottom:1px solid var(--bd);}
+.er:last-child{border-bottom:none;}
+.er:hover{background:var(--s2);}
+.ei{background:var(--s2);border:1px solid var(--bd);border-radius:6px;color:var(--tx);font-size:12px;font-weight:600;padding:4px 7px;outline:none;transition:border-color .2s;}
+.ei:focus{border-color:var(--ac);}
+.en{flex:1;text-align:right;direction:rtl;}
+.ev{width:100px;text-align:left;direction:ltr;}
+.db{background:none;border:none;color:var(--bd);cursor:pointer;font-size:12px;padding:3px 5px;border-radius:4px;transition:color .2s;line-height:1;}
+.db:hover{color:var(--rd);}
+.ab{width:100%;padding:7px;background:transparent;border:1px dashed var(--bd);color:var(--tx2);font-size:12px;cursor:pointer;transition:all .2s;}
+.ab:hover{border-color:var(--ac);color:var(--ac);}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.g2 .fw{grid-column:1/-1;}
+
+/* NET */
+.nr{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:7px;background:var(--s2);margin-bottom:5px;}
+.nr.fin{background:linear-gradient(135deg,#1a2e28,#1e2a3a);border:1px solid var(--ac2);font-weight:800;font-size:14px;}
+.nr.nfin{background:linear-gradient(135deg,#2e1a1e,#2a1a1e);border:1px solid var(--rd);font-weight:800;font-size:14px;}
+.pos{color:var(--gr);font-weight:700;}.neg{color:var(--rd);font-weight:700;}
+
+/* TABS */
+.stabs{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap;}
+.st{padding:5px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--bd);background:var(--s);color:var(--tx2);transition:all .2s;}
+.st:hover{border-color:var(--ac);color:var(--tx);}
+.st.on{background:var(--s2);border-color:var(--ac);color:var(--ac);}
+
+/* OT TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.tbl th{background:var(--s2);padding:8px 9px;text-align:right;font-weight:700;font-size:10px;color:var(--tx2);border-bottom:1px solid var(--bd);white-space:nowrap;}
+.tbl td{padding:5px 6px;border-bottom:1px solid var(--bd);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--s2);}
+.tbl .ei{font-size:11px;padding:3px 6px;width:100%;}
+.tbl select.ei{width:100%;font-size:11px;}
+
+/* STATUS TAGS */
+.tag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700;white-space:nowrap;display:inline-block;}
+.tg{background:#1a2e28;color:var(--gr);}
+.tw{background:#2e251a;color:var(--wn);}
+.tr{background:#2e1a1e;color:var(--rd);}
+.ta{background:#1e2a3a;color:var(--ac);}
+
+/* VISA CARD */
+.vc{background:var(--s);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:11px;}
+.vctop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px;}
+.vcname-wrap{flex:1;}
+.vcname{font-size:14px;font-weight:800;}
+.vcrem{font-size:20px;font-weight:900;color:var(--rd);letter-spacing:-1px;text-align:left;}
+.vcg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px;}
+.vci{background:var(--s2);border-radius:7px;padding:9px;text-align:center;border:1px solid var(--bd);}
+.vcil{font-size:10px;color:var(--tx2);margin-bottom:2px;}
+.vciv{font-size:13px;font-weight:800;}
+.bar{height:5px;background:var(--s2);border-radius:99px;overflow:hidden;}
+.barf{height:100%;border-radius:99px;transition:width .5s;}
+.bv{background:linear-gradient(90deg,var(--rd),var(--wn));}
+
+.ir{display:flex;gap:6px;align-items:center;padding:7px;background:var(--s2);border-radius:7px;margin-top:5px;flex-wrap:wrap;}
+
+/* MODAL */
+.mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;align-items:center;justify-content:center;}
+.mb.on{display:flex;}
+.md{background:var(--s);border:1px solid var(--bd);border-radius:13px;padding:18px;width:min(420px,95vw);max-height:90vh;overflow-y:auto;}
+.md h3{font-size:14px;font-weight:800;margin-bottom:13px;}
+.fr{display:flex;flex-direction:column;gap:3px;margin-bottom:10px;}
+.fr label{font-size:11px;color:var(--tx2);font-weight:600;}
+.fr .ei{width:100%;padding:7px 9px;}
+.fr select{background:var(--s2);border:1px solid var(--bd);border-radius:6px;color:var(--tx);font-size:12px;padding:7px 9px;outline:none;width:100%;}
+.btnp{background:var(--ac);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:700;padding:7px 14px;cursor:pointer;transition:opacity .2s;}
+.btnp:hover{opacity:.85;}
+.btng{background:transparent;border:1px solid var(--bd);border-radius:7px;color:var(--tx2);font-size:12px;padding:7px 14px;cursor:pointer;}
+.btng:hover{border-color:var(--tx2);}
+.btnr{background:var(--rd);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:700;padding:7px 14px;cursor:pointer;}
+.mbtns{display:flex;gap:6px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;}
+
+.prev{background:var(--s2);border-radius:7px;padding:9px;margin-top:8px;font-size:12px;}
+.prev-r{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);}
+.prev-r:last-child{border-bottom:none;}
+
+/* EDIT INPUT in card */
+.vcedit{background:var(--s2);border:1px solid var(--bd);border-radius:6px;color:var(--tx);font-size:13px;font-weight:700;padding:4px 8px;outline:none;width:100%;text-align:left;direction:ltr;}
+.vcedit:focus{border-color:var(--ac);}
+
+@media(max-width:620px){.cards{grid-template-columns:repeat(2,1fr);}.g2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="ntitle">📊 داش بورد مالي <span id="save-dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gr);margin-right:4px;vertical-align:middle;" title="محفوظ"></span></div>
+  <button class="nb on"  onclick="showPg('budget',this)">الميزانية</button>
+  <button class="nb"     onclick="showPg('cards',this)">بطاقات الائتمان</button>
+  <button class="nb"     onclick="showPg('overtime',this)">الأوفر تايم</button>
+  <button class="nb"     onclick="showPg('subs',this)">الاشتراكات</button>
+  <button class="nb" onclick="exportData()" title="تصدير نسخة احتياطية" style="margin-right:auto;">⬇️ تصدير</button>
+  <label class="nb" style="cursor:pointer;" title="استيراد نسخة احتياطية">⬆️ استيراد<input type="file" accept=".json" onchange="importData(event)" style="display:none;"></label>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE: BUDGET
+════════════════════════════════════════════ -->
+<div class="pg on" id="pg-budget">
+  <div class="stabs" id="mtabs"></div>
+  <div class="cards">
+    <div class="card cb"><div class="clbl">إجمالي الدخل</div><div class="cval" id="ci">0</div><div class="csub">ريال</div></div>
+    <div class="card cw"><div class="clbl">إجمالي الصرف</div><div class="cval" id="cs">0</div><div class="csub">ريال</div></div>
+    <div class="card cg"><div class="clbl">الصافي</div><div class="cval" id="cn">0</div><div class="csub">ريال</div></div>
+    <div class="card cr"><div class="clbl">أقساط البطاقات</div><div class="cval" id="cc">0</div><div class="csub">هذا الشهر</div></div>
+  </div>
+  <div class="g2">
+    <div class="box"><div class="bh"><span class="bht">💰 الدخل</span><span class="bhv" id="ti">0</span></div><div id="income-r"></div><button class="ab" onclick="addRow('income')">+ أضف</button></div>
+    <div class="box"><div class="bh"><span class="bht">🔒 الالتزامات الثابتة</span><span class="bhv" id="tf">0</span></div><div id="fixed-r"></div><button class="ab" onclick="addRow('fixed')">+ أضف</button></div>
+    <div class="box"><div class="bh"><span class="bht">📦 المصاريف المتغيرة</span><span class="bhv" id="tv">0</span></div><div id="var-r"></div><button class="ab" onclick="addRow('var')">+ أضف</button></div>
+    <div class="box"><div class="bh"><span class="bht">📱 الاشتراكات (هذا الشهر)</span><span class="bhv" id="ts">0</span></div><div id="sub-r"></div></div>
+    <div class="box fw"><div class="bh"><span class="bht">💾 التوفير والمحفظة</span><span class="bhv" id="tsv">0</span></div><div id="save-r"></div><button class="ab" onclick="addRow('save')">+ أضف</button></div>
+  </div>
+  <div class="box" style="padding:13px;">
+    <div class="bh" style="margin:-13px -13px 11px;"><span class="bht">📈 ملخص الشهر</span></div>
+    <div id="net-sum" style="padding-top:7px;"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE: CREDIT CARDS
+════════════════════════════════════════════ -->
+<div class="pg" id="pg-cards">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:13px;">
+    <h2 style="font-size:15px;font-weight:800;">💳 بطاقات الائتمان</h2>
+    <button class="btnp" onclick="openAddCard()">+ أضف بطاقة</button>
+  </div>
+  <div id="cards-list"></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE: OVERTIME
+════════════════════════════════════════════ -->
+<div class="pg" id="pg-overtime">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;">
+    <h2 style="font-size:15px;font-weight:800;">⏰ سجل الأوفر تايم</h2>
+    <button class="btnp" onclick="openAddOT()">+ أضف سجل</button>
+  </div>
+  <!-- OT monthly totals bar -->
+  <div class="box" style="padding:12px;margin-bottom:11px;">
+    <div class="bh" style="margin:-12px -12px 10px;"><span class="bht">مجاميع الأوفر تايم حسب الشهر</span></div>
+    <div id="ot-month-totals" style="display:flex;flex-wrap:wrap;gap:7px;padding-top:4px;"></div>
+  </div>
+  <div class="box" style="overflow-x:auto;">
+    <table class="tbl" id="ot-tbl">
+      <thead><tr>
+        <th>التاريخ</th><th>النوع</th><th>رقم الطلب</th><th>الحالة</th><th>Claimed</th><th>Paid</th><th>تاريخ الدفع</th><th>الشهر</th><th>المبلغ</th><th></th>
+      </tr></thead>
+      <tbody id="ot-body"></tbody>
+    </table>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;align-items:center;margin-top:8px;">
+    <span style="font-size:12px;color:var(--tx2);">الإجمالي الكلي:</span>
+    <span style="font-size:15px;font-weight:800;color:var(--ac2);" id="ot-tot">0 ريال</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PAGE: SUBSCRIPTIONS
+════════════════════════════════════════════ -->
+<div class="pg" id="pg-subs">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;">
+    <h2 style="font-size:15px;font-weight:800;">📱 الاشتراكات الشهرية</h2>
+    <button class="btnp" onclick="openAddSub()">+ أضف اشتراك</button>
+  </div>
+  <div class="box" style="overflow-x:auto;">
+    <table class="tbl" id="sub-tbl">
+      <thead><tr>
+        <th>تاريخ الخصم</th><th>الاشتراك</th><th>الشهر</th><th>الحساب</th><th>المبلغ</th><th>الحالة</th><th></th>
+      </tr></thead>
+      <tbody id="sub-body"></tbody>
+    </table>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;align-items:center;margin-top:8px;">
+    <span style="font-size:12px;color:var(--tx2);">الإجمالي:</span>
+    <span style="font-size:15px;font-weight:800;color:var(--ac2);" id="sub-tot">0 ريال</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════ -->
+
+<!-- ADD CARD -->
+<div class="mb" id="m-card">
+  <div class="md">
+    <h3>💳 أضف بطاقة ائتمانية</h3>
+    <div class="fr"><label>اسم البطاقة</label><input class="ei" id="fc-name" placeholder="مثال: فيزا الراجحي"></div>
+    <div class="fr"><label>إجمالي المديونية</label><input class="ei" type="number" id="fc-total" placeholder="0"></div>
+    <div class="fr"><label>المبلغ المسدد مسبقاً</label><input class="ei" type="number" id="fc-paid" placeholder="0"></div>
+    <div class="fr"><label>تقسيم الباقي على عدد أشهر</label><input class="ei" type="number" id="fc-months" placeholder="عدد الأشهر" min="1"></div>
+    <div class="fr"><label>شهر بداية الخصم</label>
+      <select id="fc-start">
+        <option value="5">شهر 5</option><option value="6">شهر 6</option><option value="7">شهر 7</option>
+        <option value="8">شهر 8</option><option value="9">شهر 9</option><option value="10">شهر 10</option>
+        <option value="11">شهر 11</option><option value="12">شهر 12</option>
+      </select>
+    </div>
+    <div id="prev-area"></div>
+    <div class="mbtns">
+      <button class="btng" onclick="closeM('m-card')">إلغاء</button>
+      <button class="btnp" onclick="previewCard()">معاينة الأقساط</button>
+      <button class="btnp" id="save-card-btn" style="display:none" onclick="saveCard()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT CARD FIELD -->
+<div class="mb" id="m-edit-card">
+  <div class="md">
+    <h3 id="ece-title">تعديل القيمة</h3>
+    <div class="fr"><label id="ece-label">القيمة</label><input class="ei" type="number" id="ece-val" placeholder="0"></div>
+    <div class="mbtns">
+      <button class="btng" onclick="closeM('m-edit-card')">إلغاء</button>
+      <button class="btnp" onclick="saveCardEdit()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="mb" id="m-pay">
+  <div class="md">
+    <h3>💸 سداد / خصم</h3>
+    <div class="fr"><label>النوع</label>
+      <select id="pay-type">
+        <option value="pay">سداد (تخفيض المديونية)</option>
+        <option value="charge">خصم / مشتريات جديدة</option>
+      </select>
+    </div>
+    <div class="fr"><label>المبلغ</label><input class="ei" type="number" id="pay-amt" placeholder="0"></div>
+    <div class="fr"><label>ملاحظة (اختياري)</label><input class="ei" id="pay-note" placeholder="مثال: دفعة شهر 6"></div>
+    <div class="mbtns">
+      <button class="btng" onclick="closeM('m-pay')">إلغاء</button>
+      <button class="btnp" onclick="savePayment()">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD OT -->
+<div class="mb" id="m-ot">
+  <div class="md">
+    <h3>⏰ أضف سجل أوفر تايم</h3>
+    <div class="fr"><label>التاريخ</label><input class="ei" type="date" id="fo-date"></div>
+    <div class="fr"><label>النوع</label><input class="ei" id="fo-type" placeholder="مثال: Overtime"></div>
+    <div class="fr"><label>رقم الطلب</label><input class="ei" id="fo-req" placeholder="اختياري"></div>
+    <div class="fr"><label>الحالة</label>
+      <select id="fo-status"><option value="Approved">Approved</option><option value="Still">Still</option><option value="Req">Req</option></select>
+    </div>
+    <div class="fr"><label>Claimed</label>
+      <select id="fo-claimed"><option value="Approved">Approved</option><option value="Still">Still</option><option value="">—</option></select>
+    </div>
+    <div class="fr"><label>Paid</label>
+      <select id="fo-paid-s"><option value="Paid">Paid</option><option value="Still">Still</option><option value="">—</option></select>
+    </div>
+    <div class="fr"><label>تاريخ الدفع</label><input class="ei" type="date" id="fo-paydate"></div>
+    <div class="fr"><label>الشهر (1-12)</label>
+      <select id="fo-month">
+        <option value="4">4 - أبريل</option><option value="5">5 - مايو</option><option value="6">6 - يونيو</option>
+        <option value="7">7 - يوليو</option><option value="8">8 - أغسطس</option><option value="9">9 - سبتمبر</option>
+        <option value="10">10 - أكتوبر</option><option value="11">11 - نوفمبر</option><option value="12">12 - ديسمبر</option>
+      </select>
+    </div>
+    <div class="fr"><label>المبلغ</label><input class="ei" type="number" id="fo-amt" placeholder="0"></div>
+    <div class="mbtns">
+      <button class="btng" onclick="closeM('m-ot')">إلغاء</button>
+      <button class="btnp" onclick="saveOT()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SUB -->
+<div class="mb" id="m-sub">
+  <div class="md">
+    <h3>📱 أضف اشتراك شهري</h3>
+    <div class="fr"><label>تاريخ الخصم</label><input class="ei" type="date" id="fs-date"></div>
+    <div class="fr"><label>اسم الاشتراك</label><input class="ei" id="fs-name" placeholder="مثال: تادلا"></div>
+    <div class="fr"><label>الشهر (1-12)</label>
+      <select id="fs-month">
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+        <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+      </select>
+    </div>
+    <div class="fr"><label>الحساب</label><input class="ei" id="fs-acc" placeholder="مثال: الاهلي"></div>
+    <div class="fr"><label>المبلغ</label><input class="ei" type="number" id="fs-amt" placeholder="0"></div>
+    <div class="fr"><label>الحالة</label>
+      <select id="fs-status"><option value="paid">مدفوع</option><option value="still">قيد الانتظار</option></select>
+    </div>
+    <div class="mbtns">
+      <button class="btng" onclick="closeM('m-sub')">إلغاء</button>
+      <button class="btnp" onclick="saveSub()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+const MN={4:'شهر 4',5:'شهر 5',6:'شهر 6',7:'شهر 7',8:'شهر 8',9:'شهر 9',10:'شهر 10',11:'شهر 11',12:'شهر 12'};
+const MONTHS=[{id:5,lbl:'شهر 5→6'},{id:6,lbl:'شهر 6→7'},{id:7,lbl:'شهر 7→8'},{id:8,lbl:'شهر 8→9'},{id:9,lbl:'شهر 9→10'},{id:10,lbl:'شهر 10→11'},{id:11,lbl:'شهر 11→12'}];
+
+// OT Records (full table from image)
+let otRecords=[
+  {date:'11/10/2025',type:'Overtime',req:'251014033716',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/11/2025',month:11,amt:0},
+  {date:'12/10/2025',type:'Training',req:'251108160035',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/12/2025',month:12,amt:0},
+  {date:'09/11/2025',type:'Overtime',req:'251123072440',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/12/2025',month:12,amt:0},
+  {date:'10/11/2025',type:'Overtime',req:'251123072440',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/12/2025',month:12,amt:0},
+  {date:'11/11/2025',type:'Overtime',req:'251123072440',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/12/2025',month:12,amt:0},
+  {date:'20/11/2025',type:'Overtime',req:'251123072440',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/12/2025',month:12,amt:0},
+  {date:'21/11/2025',type:'Overtime',req:'251123072440',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/12/2025',month:12,amt:0},
+  {date:'30/11/2025',type:'Overtime',req:'251207105720',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/12/2025',month:12,amt:0},
+  {date:'01/12/2025',type:'Overtime',req:'251203154825',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/12/2025',month:12,amt:0},
+  {date:'02/12/2025',type:'Overtime',req:'251203154825',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/12/2025',month:12,amt:0},
+  {date:'20/12/2025',type:'Overtime',req:'251222165030',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/01/2026',month:1,amt:632},
+  {date:'30/12/2025',type:'Overtime',req:'251231070341',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/01/2026',month:1,amt:632},
+  {date:'31/12/2025',type:'Overtime',req:'251231070341',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/01/2026',month:1,amt:632},
+  {date:'01/01/2026',type:'Training overtime',req:'260118013141',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/01/2026',month:1,amt:237},
+  {date:'01/01/2026',type:'Comp day overtime',req:'',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/01/2026',month:1,amt:3918.40},
+  {date:'19/01/2026',type:'Overtime',req:'260120161626',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/02/2026',month:2,amt:632},
+  {date:'29/01/2026',type:'Overtime',req:'260130214941',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/02/2026',month:2,amt:632},
+  {date:'30/01/2026',type:'Overtime',req:'260130214941',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/02/2026',month:2,amt:632},
+  {date:'08/02/2026',type:'Overtime',req:'260211060823',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/02/2026',month:2,amt:632},
+  {date:'15/02/2026',type:'Ramadan',req:'',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'15/02/2026',month:2,amt:9480},
+  {date:'22/02/2026',type:'Faunding 7',req:'260225214819',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/03/2026',month:3,amt:553},
+  {date:'21/02/2026',type:'Ramadan hours 1',req:'260303010531',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/03/2026',month:3,amt:59.25},
+  {date:'23/02/2026',type:'Ramadan hours 1',req:'260310161244',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/03/2026',month:3,amt:59.25},
+  {date:'25/02/2026',type:'Ramadan hours 2',req:'260310161244',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/03/2026',month:3,amt:118.5},
+  {date:'08/03/2026',type:'Ramadan hours 5',req:'260315002524',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'02/04/2026',month:4,amt:296.25},
+  {date:'18/03/2026',type:'Ramadan hours 3',req:'260325024058',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/04/2026',month:4,amt:177.75},
+  {date:'20/03/2026',type:'Eid Alfeter',req:'Supervisor',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/04/2026',month:4,amt:160},
+  {date:'25/03/2026',type:'Rwy-incur-inha',req:'260518052817',status:'Req',claimed:'Still',paid:'Still',paydate:'25/03/2026',month:4,amt:158},
+  {date:'30/03/2026',type:'Overtime',req:'260403020908',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/04/2026',month:4,amt:632},
+  {date:'31/03/2026',type:'Overtime',req:'260403020908',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/04/2026',month:4,amt:632},
+  {date:'01/04/2026',type:'Bonus',req:'',status:'Approved',claimed:'Approved',paid:'Paid',paydate:'25/04/2026',month:4,amt:9480},
+  {date:'19/04/2026',type:'Overtime',req:'260422070625',status:'Approved',claimed:'Approved',paid:'Still',paydate:'21/05/2026',month:5,amt:649},
+  {date:'20/04/2026',type:'Overtime',req:'260422070625',status:'Approved',claimed:'Approved',paid:'Still',paydate:'21/05/2026',month:5,amt:649},
+  {date:'09/05/2026',type:'Overtime',req:'260512044211',status:'Approved',claimed:'Approved',paid:'Still',paydate:'21/05/2026',month:5,amt:649},
+  {date:'10/05/2026',type:'Overtime',req:'260512044211',status:'Approved',claimed:'Approved',paid:'Still',paydate:'21/05/2026',month:5,amt:649},
+  {date:'27/05/2026',type:'Eid Aladha',req:'',status:'Still',claimed:'Still',paid:'Still',paydate:'25/06/2026',month:6,amt:649},
+  {date:'27/05/2026',type:'Eid Aladha',req:'',status:'Still',claimed:'Still',paid:'Still',paydate:'25/06/2026',month:6,amt:649},
+  {date:'27/05/2026',type:'Eid Aladha',req:'',status:'Still',claimed:'Still',paid:'Still',paydate:'25/06/2026',month:6,amt:649},
+];
+
+// Subscriptions (moved from old OT table)
+let subRecords=[
+  {date:'28/04/2026',name:'تادلا',month:5,acc:'الاهلي',amt:95.84,status:'paid'},
+  {date:'30/04/2026',name:'مس بينكي',month:5,acc:'الاهلي',amt:86.99,status:'paid'},
+  {date:'01/05/2026',name:'وقت اللياقه',month:5,acc:'',amt:379.44,status:'paid'},
+  {date:'16/05/2026',name:'الشيخه خديجه',month:5,acc:'الاهلي',amt:121.4,status:'paid'},
+  {date:'19/05/2026',name:'عيادة تجميل',month:5,acc:'فيز',amt:758.64,status:'paid'},
+  {date:'28/05/2026',name:'تادلا',month:6,acc:'',amt:95.84,status:'still'},
+  {date:'30/05/2026',name:'مس بينكي',month:6,acc:'',amt:86.99,status:'still'},
+  {date:'30/05/2026',name:'النهدي',month:6,acc:'',amt:96.32,status:'still'},
+  {date:'01/06/2026',name:'وقت اللياقه',month:6,acc:'',amt:379.44,status:'still'},
+  {date:'04/06/2026',name:'هوم سنتر',month:6,acc:'',amt:149.75,status:'still'},
+  {date:'05/06/2026',name:'شي ان',month:6,acc:'',amt:366.11,status:'still'},
+  {date:'16/06/2026',name:'الشيخه خديجه',month:6,acc:'',amt:121.4,status:'still'},
+  {date:'28/06/2026',name:'تادلا',month:7,acc:'',amt:95.84,status:'still'},
+  {date:'30/06/2026',name:'من بينكي',month:7,acc:'',amt:86.99,status:'still'},
+  {date:'01/07/2026',name:'وقت اللياقه',month:7,acc:'',amt:379.44,status:'still'},
+  {date:'04/07/2026',name:'هوم سنتر',month:7,acc:'',amt:149.75,status:'still'},
+  {date:'05/07/2026',name:'شي ان',month:7,acc:'',amt:366.11,status:'still'},
+  {date:'16/07/2026',name:'الشيخه خديجه',month:7,acc:'',amt:121.4,status:'still'},
+  {date:'01/08/2026',name:'وقت اللياقه',month:8,acc:'',amt:379.44,status:'still'},
+  {date:'04/08/2026',name:'هوم سنتر',month:8,acc:'',amt:149.75,status:'still'},
+  {date:'05/08/2026',name:'شي ان',month:8,acc:'',amt:366.11,status:'still'},
+  {date:'01/09/2026',name:'وقت اللياقه',month:9,acc:'',amt:379.44,status:'still'},
+];
+
+// Credit cards
+let cards=[{id:1,name:'فيزا الراجحي',total:11545,paid:4973.25,log:[],installments:[{month:5,amount:6571.75,date:'2026-06-25',done:false}]}];
+
+// Budget data
+function defBudget(m){
+  const b={
+    income:[{n:'الراتب',v:11532.8},{n:'حساب المواطن',v:400},{n:'أوفر تايم',v:0},{n:'دخل إضافي',v:0}],
+    fixed:[{n:'القروض',v:1671},{n:'السيارة',v:600},{n:'البيبي',v:1000}],
+    var:[{n:'مصروفي',v:1000},{n:'مصروف وَنَام',v:1000},{n:'مطاعم',v:1000},{n:'السوبرماركت',v:1000},{n:'فواتير',v:m===5?875:841.95},{n:'صيدليات وأخرى',v:500}],
+    save:[{n:'محفظة',v:1121.8},{n:'تقويم',v:2040}],
+  };
+  if(m===5){b.income[3]={n:'أبويه',v:1500};b.fixed.push({n:'المويه',v:1000});}
+  if(m===6){b.income.push({n:'بدل السكن',v:14602.5});b.fixed.push({n:'سداد إيجار',v:15000});}
+  return b;
+}
+let budgets={};
+MONTHS.forEach(m=>{budgets[m.id]=defBudget(m.id);});
+// Set OT totals
+updateAllOTInBudgets();
+
+let curM=5, pendCard=null, editCardId=null, editCardField=null, payCardId=null;
+
+// ══════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════
+const f=n=>Number(n||0).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fi=n=>Number(n||0).toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0});
+
+function otMonthTotal(m){ return otRecords.filter(r=>r.month===m).reduce((s,r)=>s+(r.amt||0),0); }
+function subMonthTotal(m){ return subRecords.filter(r=>r.month===m).reduce((s,r)=>s+(r.amt||0),0); }
+function instForMonth(mid){ return cards.reduce((s,c)=>s+c.installments.filter(i=>i.month===mid).reduce((a,i)=>a+i.amount,0),0); }
+
+function updateAllOTInBudgets(){
+  MONTHS.forEach(m=>{
+    const ot=otMonthTotal(m.id);
+    const row=budgets[m.id].income.find(r=>r.n==='أوفر تايم');
+    if(row) row.v=ot;
+  });
+}
+
+function updateSubsInBudget(mid){
+  // sub section in budget shows current month's subs
+}
+
+// ══════════════════════════════════════════════════
+// PAGES
+// ══════════════════════════════════════════════════
+function showPg(name,btn){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+name).classList.add('on');
+  if(btn) btn.classList.add('on');
+  if(name==='overtime') renderOT();
+  if(name==='cards') renderCards();
+  if(name==='budget') renderBudget();
+  if(name==='subs') renderSubs();
+}
+
+// ══════════════════════════════════════════════════
+// MONTH TABS
+// ══════════════════════════════════════════════════
+function renderTabs(){
+  const c=document.getElementById('mtabs');c.innerHTML='';
+  MONTHS.forEach(m=>{
+    const t=document.createElement('button');
+    t.className='st'+(m.id===curM?' on':'');
+    t.textContent=m.lbl;
+    t.onclick=()=>{curM=m.id;renderBudget();};
+    c.appendChild(t);
+  });
+}
+
+// ══════════════════════════════════════════════════
+// BUDGET
+// ══════════════════════════════════════════════════
+function renderBudget(){
+  renderTabs();
+  ['income','fixed','var','save'].forEach(renderCat);
+  renderSubBudget();
+  calcTotals();
+}
+
+function renderCat(cat){
+  const c=document.getElementById(cat+'-r');c.innerHTML='';
+  budgets[curM][cat].forEach((row,i)=>{
+    const d=document.createElement('div');d.className='er';
+    d.innerHTML=`<input class="ei en" value="${row.n}" onchange="budgets[${curM}]['${cat}'][${i}].n=this.value" placeholder="الاسم">
+    <input class="ei ev" type="number" value="${row.v}" oninput="budgets[${curM}]['${cat}'][${i}].v=parseFloat(this.value)||0;calcTotals();" placeholder="0">
+    <button class="db" onclick="delRow('${cat}',${i})">✕</button>`;
+    c.appendChild(d);
+  });
+}
+
+function renderSubBudget(){
+  const c=document.getElementById('sub-r');c.innerHTML='';
+  const subs=subRecords.filter(r=>r.month===curM);
+  subs.forEach(r=>{
+    const d=document.createElement('div');d.className='er';
+    d.innerHTML=`<span class="en" style="color:var(--tx2);font-size:12px;">${r.name}</span>
+    <span class="ev" style="font-weight:700;color:var(--tx);font-size:12px;direction:ltr;text-align:left;">${f(r.amt)}</span>`;
+    c.appendChild(d);
+  });
+  if(!subs.length){c.innerHTML='<div style="padding:10px 14px;font-size:12px;color:var(--tx2);">لا اشتراكات هذا الشهر</div>';}
+}
+
+function addRow(cat){
+  budgets[curM][cat].push({n:'بند جديد',v:0});
+  renderBudget();
+  setTimeout(()=>{const r=document.getElementById(cat+'-r').querySelectorAll('.en');if(r.length)r[r.length-1].focus();},40);
+}
+function delRow(cat,i){budgets[curM][cat].splice(i,1);renderBudget();}
+function sum(cat){return budgets[curM][cat].reduce((s,r)=>s+(parseFloat(r.v)||0),0);}
+
+function calcTotals(){
+  const inc=sum('income'), fx=sum('fixed'), vr=sum('var'), sv=sum('save');
+  const sb=subMonthTotal(curM);
+  const inst=instForMonth(curM);
+  const spend=fx+vr+sb+sv+inst;
+  const net=inc-spend;
+
+  document.getElementById('ti').textContent=f(inc);
+  document.getElementById('tf').textContent=f(fx);
+  document.getElementById('tv').textContent=f(vr);
+  document.getElementById('ts').textContent=f(sb);
+  document.getElementById('tsv').textContent=f(sv);
+  document.getElementById('ci').textContent=fi(inc);
+  document.getElementById('cs').textContent=fi(spend);
+  document.getElementById('cn').textContent=fi(net);
+  document.getElementById('cn').style.color=net>=0?'var(--gr)':'var(--rd)';
+  document.getElementById('cc').textContent=fi(inst);
+
+  const ns=document.getElementById('net-sum');
+  ns.innerHTML=`
+    <div class="nr"><span>الدخل</span><span class="pos">${f(inc)} ريال</span></div>
+    <div class="nr"><span>الالتزامات الثابتة</span><span class="neg">- ${f(fx)} ريال</span></div>
+    <div class="nr"><span>المصاريف المتغيرة</span><span class="neg">- ${f(vr)} ريال</span></div>
+    <div class="nr"><span>الاشتراكات</span><span class="neg">- ${f(sb)} ريال</span></div>
+    <div class="nr"><span>التوفير</span><span class="neg">- ${f(sv)} ريال</span></div>
+    ${inst>0?`<div class="nr"><span>أقساط البطاقات</span><span class="neg">- ${f(inst)} ريال</span></div>`:''}
+    <div class="nr ${net>=0?'fin':'nfin'}"><span>الصافي</span><span class="${net>=0?'pos':'neg'}">${f(net)} ريال</span></div>`;
+}
+
+// ══════════════════════════════════════════════════
+// CREDIT CARDS
+// ══════════════════════════════════════════════════
+function renderCards(){
+  const c=document.getElementById('cards-list');c.innerHTML='';
+  if(!cards.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--tx2);font-size:13px;">لا توجد بطاقات</div>';return;}
+  cards.forEach(card=>{
+    const paidTotal=card.installments.filter(i=>i.done).reduce((s,i)=>s+i.amount,0)+card.paid;
+    const rem=Math.max(0,card.total-paidTotal);
+    const pct=Math.min(100,Math.round((paidTotal/card.total)*100));
+    let instHTML='';
+    card.installments.forEach((inst,idx)=>{
+      const isCur=inst.month===curM;
+      instHTML+=`<div class="ir">
+        <span style="font-size:11px;color:var(--tx2);min-width:55px;">${MN[inst.month]||'شهر '+inst.month}</span>
+        <input class="ei ev" type="number" value="${inst.amount}" style="width:100px;" oninput="editIA(${card.id},${idx},this.value)">
+        <input class="ei" type="date" value="${inst.date}" style="width:135px;" onchange="editID(${card.id},${idx},this.value)">
+        <span class="tag ${inst.done?'tg':isCur?'ta':'tw'}">${inst.done?'مدفوع':isCur?'هذا الشهر':'قادم'}</span>
+        <button class="db" onclick="togInst(${card.id},${idx})" style="color:var(--ac2);" title="تبديل الحالة">✓</button>
+        <button class="db" onclick="delInst(${card.id},${idx})">✕</button>
+      </div>`;
+    });
+    // Payment log
+    let logHTML='';
+    if(card.log&&card.log.length){
+      logHTML='<div style="margin-top:10px;"><div style="font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:5px;">سجل العمليات</div>';
+      card.log.forEach(l=>{
+        logHTML+=`<div style="display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid var(--bd);">
+          <span style="color:var(--tx2);">${l.date}</span>
+          <span>${l.note||''}</span>
+          <span style="color:${l.type==='pay'?'var(--gr)':'var(--rd)'};font-weight:700;">${l.type==='pay'?'-':'+'}${f(l.amt)}</span>
+        </div>`;
+      });
+      logHTML+='</div>';
+    }
+    const box=document.createElement('div');box.className='vc';
+    box.innerHTML=`
+      <div class="vctop">
+        <div class="vcname-wrap">
+          <div class="vcname">${card.name}</div>
+          <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;">
+            <button class="btnp" style="font-size:11px;padding:4px 10px;" onclick="openPay(${card.id})">💸 سداد / خصم</button>
+            <button class="db" style="font-size:11px;color:var(--tx2);border:1px solid var(--bd);border-radius:6px;padding:4px 8px;" onclick="addInstM(${card.id})">+ قسط يدوي</button>
+            <button class="db" style="font-size:11px;color:var(--rd);border:1px solid var(--rd);border-radius:6px;padding:4px 8px;" onclick="delCard(${card.id})">حذف</button>
+          </div>
+        </div>
+        <div style="text-align:left;">
+          <div class="vcrem">${f(rem)}</div>
+          <div style="font-size:10px;color:var(--tx2);">متبقي</div>
+        </div>
+      </div>
+      <div class="vcg">
+        <div class="vci">
+          <div class="vcil">الإجمالي</div>
+          <div class="vciv" style="color:var(--tx)">${f(card.total)}</div>
+          <button class="db" style="font-size:10px;color:var(--ac);margin-top:3px;" onclick="openEditCard(${card.id},'total','إجمالي المديونية')">تعديل</button>
+        </div>
+        <div class="vci">
+          <div class="vcil">المسدد</div>
+          <div class="vciv" style="color:var(--gr)">${f(paidTotal)}</div>
+          <button class="db" style="font-size:10px;color:var(--ac);margin-top:3px;" onclick="openEditCard(${card.id},'paid','المسدد المبدئي')">تعديل</button>
+        </div>
+        <div class="vci">
+          <div class="vcil">الباقي</div>
+          <div class="vciv" style="color:var(--rd)">${f(rem)}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx2);margin-bottom:4px;">
+        <span>تقدم السداد</span><span style="color:var(--ac2)">${pct}%</span>
+      </div>
+      <div class="bar"><div class="barf bv" style="width:${pct}%"></div></div>
+      <div style="margin-top:11px;">
+        <div style="font-size:12px;font-weight:700;margin-bottom:5px;">جدول الأقساط</div>
+        ${instHTML}
+      </div>
+      ${logHTML}`;
+    c.appendChild(box);
+  });
+}
+
+function editIA(cid,idx,v){const c=cards.find(c=>c.id===cid);if(c){c.installments[idx].amount=parseFloat(v)||0;calcTotals();}}
+function editID(cid,idx,v){const c=cards.find(c=>c.id===cid);if(c)c.installments[idx].date=v;}
+function togInst(cid,idx){const c=cards.find(c=>c.id===cid);if(c){c.installments[idx].done=!c.installments[idx].done;renderCards();calcTotals();}}
+function delInst(cid,idx){const c=cards.find(c=>c.id===cid);if(c){c.installments.splice(idx,1);renderCards();calcTotals();}}
+function delCard(cid){if(confirm('حذف البطاقة نهائياً؟')){cards=cards.filter(c=>c.id!==cid);renderCards();calcTotals();}}
+function addInstM(cid){const c=cards.find(c=>c.id===cid);if(c){c.installments.push({month:curM,amount:0,date:`2026-${String(curM).padStart(2,'0')}-25`,done:false});renderCards();}}
+
+function openEditCard(cid,field,label){
+  editCardId=cid; editCardField=field;
+  const c=cards.find(c=>c.id===cid);
+  document.getElementById('ece-title').textContent='تعديل: '+label;
+  document.getElementById('ece-label').textContent=label;
+  document.getElementById('ece-val').value=c[field]||0;
+  openM('m-edit-card');
+}
+function saveCardEdit(){
+  const c=cards.find(c=>c.id===editCardId);
+  if(c) c[editCardField]=parseFloat(document.getElementById('ece-val').value)||0;
+  closeM('m-edit-card'); renderCards(); calcTotals();
+}
+
+function openPay(cid){ payCardId=cid; document.getElementById('pay-amt').value=''; document.getElementById('pay-note').value=''; openM('m-pay'); }
+function savePayment(){
+  const c=cards.find(c=>c.id===payCardId);
+  if(!c) return;
+  const type=document.getElementById('pay-type').value;
+  const amt=parseFloat(document.getElementById('pay-amt').value)||0;
+  const note=document.getElementById('pay-note').value;
+  const today=new Date().toLocaleDateString('ar-SA');
+  if(!c.log) c.log=[];
+  c.log.push({type,amt,note,date:today});
+  if(type==='pay') c.paid+= amt;
+  else c.total+=amt;
+  closeM('m-pay'); renderCards(); calcTotals();
+}
+
+function openAddCard(){
+  ['fc-name','fc-total','fc-paid','fc-months'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fc-start').value='5';
+  document.getElementById('prev-area').innerHTML='';
+  document.getElementById('save-card-btn').style.display='none';
+  pendCard=null; openM('m-card');
+}
+function previewCard(){
+  const name=document.getElementById('fc-name').value||'بطاقة جديدة';
+  const total=parseFloat(document.getElementById('fc-total').value)||0;
+  const paid=parseFloat(document.getElementById('fc-paid').value)||0;
+  const mn=parseInt(document.getElementById('fc-months').value)||1;
+  const start=parseInt(document.getElementById('fc-start').value);
+  const rem=total-paid;
+  const per=parseFloat((rem/mn).toFixed(2));
+  let insts=[];
+  let html='<div class="prev"><div style="font-size:11px;font-weight:700;margin-bottom:6px;color:var(--tx2);">الأقساط المقترحة:</div>';
+  for(let i=0;i<mn;i++){
+    const m=start+i;if(m>12)break;
+    const d=`2026-${String(m).padStart(2,'0')}-25`;
+    insts.push({month:m,amount:per,date:d,done:false});
+    html+=`<div class="prev-r"><span>${MN[m]||'شهر '+m}</span><span style="font-weight:700;color:var(--ac2)">${f(per)} ريال</span></div>`;
+  }
+  html+='</div>';
+  document.getElementById('prev-area').innerHTML=html;
+  document.getElementById('save-card-btn').style.display='inline-block';
+  pendCard={id:Date.now(),name,total,paid,log:[],installments:insts};
+}
+function saveCard(){
+  if(pendCard){cards.push(pendCard);pendCard=null;}
+  closeM('m-card'); renderCards(); calcTotals();
+}
+
+// ══════════════════════════════════════════════════
+// OVERTIME
+// ══════════════════════════════════════════════════
+function stTag(v){
+  if(!v||v===''||v==='—') return `<span class="tag ta">—</span>`;
+  if(v==='Approved'||v==='Paid') return `<span class="tag tg">${v}</span>`;
+  if(v==='Still') return `<span class="tag tw">${v}</span>`;
+  if(v==='Req') return `<span class="tag tr">${v}</span>`;
+  return `<span class="tag ta">${v}</span>`;
+}
+
+function renderOT(){
+  const body=document.getElementById('ot-body');body.innerHTML='';
+  let tot=0;
+  const mSels=[4,5,6,7,8,9,10,11,12].map(m=>`<option value="${m}" >شهر ${m}</option>`).join('');
+
+  otRecords.forEach((r,i)=>{
+    tot+=r.amt;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><input class="ei" style="width:90px;" type="date" value="${toInputDate(r.date)}" onchange="otRecords[${i}].date=fromInputDate(this.value);renderOTMonthTotals();"></td>
+      <td><input class="ei" style="width:110px;" value="${r.type}" onchange="otRecords[${i}].type=this.value"></td>
+      <td><input class="ei" style="width:100px;" value="${r.req}" onchange="otRecords[${i}].req=this.value"></td>
+      <td><select class="ei" style="width:85px;" onchange="otRecords[${i}].status=this.value">
+        <option ${r.status==='Approved'?'selected':''}>Approved</option>
+        <option ${r.status==='Still'?'selected':''}>Still</option>
+        <option ${r.status==='Req'?'selected':''}>Req</option>
+      </select></td>
+      <td><select class="ei" style="width:85px;" onchange="otRecords[${i}].claimed=this.value">
+        <option ${r.claimed==='Approved'?'selected':''}>Approved</option>
+        <option ${r.claimed==='Still'?'selected':''}>Still</option>
+        <option value="" ${!r.claimed?'selected':''}>—</option>
+      </select></td>
+      <td><select class="ei" style="width:75px;" onchange="otRecords[${i}].paid=this.value">
+        <option ${r.paid==='Paid'?'selected':''}>Paid</option>
+        <option ${r.paid==='Still'?'selected':''}>Still</option>
+        <option value="" ${!r.paid?'selected':''}>—</option>
+      </select></td>
+      <td><input class="ei" style="width:90px;" type="date" value="${toInputDate(r.paydate)}" onchange="otRecords[${i}].paydate=fromInputDate(this.value)"></td>
+      <td><select class="ei" style="width:75px;" onchange="otRecords[${i}].month=parseInt(this.value);updateAllOTInBudgets();renderOTMonthTotals();">
+        ${[4,5,6,7,8,9,10,11,12].map(m=>`<option value="${m}" ${r.month===m?'selected':''}>شهر ${m}</option>`).join('')}
+      </select></td>
+      <td><input class="ei ev" style="width:75px;" type="number" value="${r.amt}" oninput="otRecords[${i}].amt=parseFloat(this.value)||0;updateAllOTInBudgets();updOTTot();renderOTMonthTotals();"></td>
+      <td><button class="db" onclick="delOT(${i})">✕</button></td>`;
+    body.appendChild(tr);
+  });
+  updOTTot();
+  renderOTMonthTotals();
+}
+
+function renderOTMonthTotals(){
+  const c=document.getElementById('ot-month-totals');c.innerHTML='';
+  [4,5,6,7,8,9,10,11,12].forEach(m=>{
+    const t=otMonthTotal(m);
+    if(t>0||otRecords.some(r=>r.month===m)){
+      const d=document.createElement('div');
+      d.style.cssText='background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:7px 12px;text-align:center;min-width:80px;';
+      d.innerHTML=`<div style="font-size:10px;color:var(--tx2);">شهر ${m}</div><div style="font-size:14px;font-weight:800;color:var(--ac2);">${fi(t)}</div>`;
+      c.appendChild(d);
+    }
+  });
+}
+
+function updOTTot(){
+  const tot=otRecords.reduce((s,r)=>s+r.amt,0);
+  document.getElementById('ot-tot').textContent=f(tot)+' ريال';
+}
+function delOT(i){otRecords.splice(i,1);updateAllOTInBudgets();renderOT();}
+
+function toInputDate(str){
+  if(!str) return '';
+  if(str.includes('-')) return str;
+  const p=str.split('/');
+  if(p.length===3) return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+  return str;
+}
+function fromInputDate(str){
+  if(!str) return '';
+  const p=str.split('-');
+  if(p.length===3) return `${p[2]}/${p[1]}/${p[0]}`;
+  return str;
+}
+
+function openAddOT(){
+  document.getElementById('fo-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('fo-paydate').value='';
+  ['fo-type','fo-req'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fo-amt').value='';
+  openM('m-ot');
+}
+function saveOT(){
+  otRecords.push({
+    date:fromInputDate(document.getElementById('fo-date').value),
+    type:document.getElementById('fo-type').value,
+    req:document.getElementById('fo-req').value,
+    status:document.getElementById('fo-status').value,
+    claimed:document.getElementById('fo-claimed').value,
+    paid:document.getElementById('fo-paid-s').value,
+    paydate:fromInputDate(document.getElementById('fo-paydate').value),
+    month:parseInt(document.getElementById('fo-month').value),
+    amt:parseFloat(document.getElementById('fo-amt').value)||0,
+  });
+  closeM('m-ot');
+  updateAllOTInBudgets();
+  renderOT();
+}
+
+// ══════════════════════════════════════════════════
+// SUBSCRIPTIONS
+// ══════════════════════════════════════════════════
+function renderSubs(){
+  const body=document.getElementById('sub-body');body.innerHTML='';
+  let tot=0;
+  subRecords.forEach((r,i)=>{
+    tot+=r.amt;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><input class="ei" style="width:90px;" type="date" value="${toInputDate(r.date)}" onchange="subRecords[${i}].date=fromInputDate(this.value)"></td>
+      <td><input class="ei" style="width:100px;" value="${r.name}" onchange="subRecords[${i}].name=this.value"></td>
+      <td><select class="ei" style="width:70px;" onchange="subRecords[${i}].month=parseInt(this.value);renderBudget();">
+        ${[4,5,6,7,8,9,10,11,12].map(m=>`<option value="${m}" ${r.month===m?'selected':''}>شهر ${m}</option>`).join('')}
+      </select></td>
+      <td><input class="ei" style="width:80px;" value="${r.acc}" onchange="subRecords[${i}].acc=this.value"></td>
+      <td><input class="ei ev" style="width:80px;" type="number" value="${r.amt}" oninput="subRecords[${i}].amt=parseFloat(this.value)||0;updSubTot();renderBudget();"></td>
+      <td><select class="ei" style="width:90px;" onchange="subRecords[${i}].status=this.value">
+        <option value="paid" ${r.status==='paid'?'selected':''}>مدفوع</option>
+        <option value="still" ${r.status==='still'?'selected':''}>قيد الانتظار</option>
+      </select></td>
+      <td><button class="db" onclick="delSub(${i})">✕</button></td>`;
+    body.appendChild(tr);
+  });
+  updSubTot();
+}
+
+function updSubTot(){
+  document.getElementById('sub-tot').textContent=f(subRecords.reduce((s,r)=>s+r.amt,0))+' ريال';
+}
+function delSub(i){subRecords.splice(i,1);renderSubs();renderBudget();}
+
+function openAddSub(){
+  document.getElementById('fs-date').value=new Date().toISOString().split('T')[0];
+  ['fs-name','fs-acc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fs-amt').value='';
+  document.getElementById('fs-month').value='5';
+  openM('m-sub');
+}
+function saveSub(){
+  subRecords.push({
+    date:fromInputDate(document.getElementById('fs-date').value),
+    name:document.getElementById('fs-name').value,
+    month:parseInt(document.getElementById('fs-month').value),
+    acc:document.getElementById('fs-acc').value,
+    amt:parseFloat(document.getElementById('fs-amt').value)||0,
+    status:document.getElementById('fs-status').value,
+  });
+  closeM('m-sub');
+  renderSubs();
+  renderBudget();
+}
+
+// ══════════════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════════════
+function openM(id){document.getElementById(id).classList.add('on');}
+function closeM(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.mb').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');}));
+
+// ══════════════════════════════════════════════════
+// SAVE / LOAD  (localStorage)
+// ══════════════════════════════════════════════════
+const SAVE_KEY = 'mali_dashboard_v1';
+let saveTimer = null;
+
+function saveData() {
+  const data = { budgets, cards, otRecords, subRecords, curM, savedAt: new Date().toISOString() };
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    flashSave(true);
+  } catch(e) {
+    flashSave(false);
+  }
+}
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (data.budgets)    budgets    = data.budgets;
+    if (data.cards)      cards      = data.cards;
+    if (data.otRecords)  otRecords  = data.otRecords;
+    if (data.subRecords) subRecords = data.subRecords;
+    if (data.curM)       curM       = data.curM;
+    return true;
+  } catch(e) { return false; }
+}
+
+function flashSave(ok) {
+  const dot = document.getElementById('save-dot');
+  if (!dot) return;
+  dot.style.background = ok ? 'var(--gr)' : 'var(--rd)';
+  dot.title = ok ? 'محفوظ ✓' : 'خطأ في الحفظ!';
+}
+
+// Auto-save: debounce 800ms after any change
+function autoSave() {
+  const dot = document.getElementById('save-dot');
+  if (dot) { dot.style.background = 'var(--wn)'; dot.title = 'جاري الحفظ...'; }
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveData, 800);
+}
+
+// Patch all mutating functions to call autoSave
+const _orig = {
+  addRow, delRow, saveCard, savePayment, saveCardEdit, saveOT, saveSub, delOT, delSub, delCard, togInst, delInst, editIA
+};
+function addRow(cat){ _orig.addRow(cat); autoSave(); }
+function delRow(cat,i){ _orig.delRow(cat,i); autoSave(); }
+function saveCard(){ _orig.saveCard(); autoSave(); }
+function savePayment(){ _orig.savePayment(); autoSave(); }
+function saveCardEdit(){ _orig.saveCardEdit(); autoSave(); }
+function saveOT(){ _orig.saveOT(); autoSave(); }
+function saveSub(){ _orig.saveSub(); autoSave(); }
+function delOT(i){ _orig.delOT(i); autoSave(); }
+function delSub(i){ _orig.delSub(i); autoSave(); }
+function delCard(cid){ _orig.delCard(cid); autoSave(); }
+function togInst(cid,idx){ _orig.togInst(cid,idx); autoSave(); }
+function delInst(cid,idx){ _orig.delInst(cid,idx); autoSave(); }
+function editIA(cid,idx,v){ _orig.editIA(cid,idx,v); autoSave(); }
+
+// Also save on any input change (catches inline edits)
+document.addEventListener('input',  () => autoSave());
+document.addEventListener('change', () => autoSave());
+
+// ── EXPORT / IMPORT ─────────────────────────────
+function exportData() {
+  const data = { budgets, cards, otRecords, subRecords, curM, savedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `mali-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.budgets)    budgets    = data.budgets;
+      if (data.cards)      cards      = data.cards;
+      if (data.otRecords)  otRecords  = data.otRecords;
+      if (data.subRecords) subRecords = data.subRecords;
+      if (data.curM)       curM       = data.curM;
+      saveData();
+      renderBudget();
+      alert('✅ تم الاستيراد بنجاح!');
+    } catch(err) {
+      alert('❌ خطأ في الملف');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ── PWA SERVICE WORKER ───────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('SW registered'))
+      .catch(e => console.log('SW error:', e));
+  });
+}
+
+// ── INSTALL PROMPT ───────────────────────────────
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install banner
+  const banner = document.createElement('div');
+  banner.id = 'install-banner';
+  banner.style.cssText = 'position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ac);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;z-index:999;box-shadow:0 4px 20px rgba(61,142,240,.4);display:flex;gap:10px;align-items:center;';
+  banner.innerHTML = '📲 أضف للشاشة الرئيسية <button onclick="dismissInstall()" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:5px;padding:2px 8px;cursor:pointer;font-size:11px;">✕</button>';
+  banner.onclick = e => { if(e.target.tagName!=='BUTTON') installApp(); };
+  document.body.appendChild(banner);
+});
+
+function installApp() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(() => { deferredPrompt = null; dismissInstall(); });
+}
+function dismissInstall() {
+  const b = document.getElementById('install-banner');
+  if (b) b.remove();
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+const loaded = loadData();
+updateAllOTInBudgets();
+renderBudget();
+if (loaded) flashSave(true);
+</script>
+</body>
+</html>
